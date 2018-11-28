@@ -22,10 +22,5 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="olive" Version="1.0.136" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Olive">
-      <HintPath>..\bin\netstandard2.0\Olive.dll</HintPath>
-    </Reference>
-  </ItemGroup>
   <Import Project="..\..\Shared\Shared.projitems" Label="Shared" />  
 </Project>
