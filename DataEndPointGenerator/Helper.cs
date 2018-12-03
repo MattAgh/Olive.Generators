@@ -48,5 +48,12 @@ namespace OliveGenerator
             Console.ReadKey(intercept: true);
             return -1;
         }
+
+        public static void ShowError(Exception ex, ConsoleColor color = ConsoleColor.Red)
+        {
+            Console.ForegroundColor = color;
+            Console.Write(" " + ex.Message);
+            Console.ResetColor();
+        }
     }
 }
