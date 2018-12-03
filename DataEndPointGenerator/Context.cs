@@ -66,7 +66,7 @@ namespace OliveGenerator
             if (EndPointNamespaceType == null)
             {
                 EndPointNamespaceType = AssemblyObject.GetTypes().FirstOrDefault(x => x.Name == EndPointName)
-                  ?? throw new Exception(EndPointName + " was not found.");
+                  ?? throw new Exception($"No type in the assembly {AssemblyFile.FullName} is named: {EndPointName}.");
                 if (EndPointNamespaceType != null)
                 {
                     EndPointName = EndPointNamespaceType.FullName; // Ensure it has full namespace
@@ -83,20 +83,17 @@ namespace OliveGenerator
         internal static void FindReplicatedDataClasses()
         {
             var replicatedDataChildClass = AssemblyObject.GetTypes().Where(x => x.BaseType.IsA(typeof(ReplicatedData)));
-            if (replicatedDataChildClass == null)
-                return;
+            if (replicatedDataChildClass == null) return;
 
             foreach (var childClass in replicatedDataChildClass)
             {
                 var instanceClass = childClass.CreateInstance();
                 var methodDefine = instanceClass.GetType().GetRuntimeMethods().Where(x => x.Name == "Define").FirstOrDefault();
-                if (methodDefine == null)
-                    continue;
+                if (methodDefine == null) continue;
 
                 methodDefine.Invoke(instanceClass, null);
                 var replicatedDataObject = (ReplicatedData)instanceClass;
-                if (replicatedDataObject == null)
-                    continue;
+                if (replicatedDataObject == null) continue;
 
                 ReplicatedDataList.Add(new ReplicatedDataType(childClass, replicatedDataObject));
             }

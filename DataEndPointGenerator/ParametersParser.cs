@@ -13,10 +13,10 @@ namespace OliveGenerator
         {
 #if DEBUG
             args = new string[3];
-            args[0] = @"/assembly:D:\_Source_Control\__Geeks\FifthProject\micro1\Website\bin\Debug\netcoreapp2.1\website.dll";
-            args[1] = @"/dataEndpoint:OrdersEndPoint";
-            args[2] = @"/out:D:\_Source_Control\__Geeks\FifthProject\micro1\PrivatePackagesEndPoint";
-            Context.Source = @"D:\_Source_Control\__Geeks\FifthProject\micro1\Website\EndPoint".AsDirectory();
+            args[0] = @"/assembly:C:\Projects\Geeks.MS\People\Website\bin\Debug\netcoreapp2.1\website.dll";
+            args[1] = @"/dataEndpoint:ProjectsEndPoint";
+            args[2] = @"/out:C:\Temp\PrivatePackagesEndPoint";
+            Context.Source = @"C:\Projects\Geeks.MS\People\Website\Api\DataReplication".AsDirectory();
 #else
             Context.Source = Environment.CurrentDirectory.AsDirectory();
 #endif

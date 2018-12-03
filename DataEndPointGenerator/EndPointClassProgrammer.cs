@@ -29,15 +29,12 @@ namespace OliveGenerator
             }
 
             r.AppendLine();
-            for (int i = 0; i < Context.EndPointCustomAttributes.Length; i++)
+            for (var i = 0; i < Context.EndPointCustomAttributes.Length; i++)
             {
                 var item = Context.EndPointCustomAttributes[i];
                 r.AppendLine($"/// <summary> Clears all messages from the queue of {item.Type.Name.ToLower()} data. It will then");
                 r.AppendLine($"/// fetch the current data directly from the {item.Type.FullName}. </summary>");
-                if (i == 0)
-                    r.AppendLine($"public static Task Refresh{item.Type.Name}Data() =>  RefreshData({item.Type.Name}Type);");
-                else
-                    r.AppendLine($"public static async Task Refresh{item.Type.Name}Data() =>  RefreshData({item.Type.Name}Type);");
+                r.AppendLine($"public static Task Refresh{item.Type.Name}Data() => RefreshData({item.Type.Name}Type);");
                 r.AppendLine();
             }
 
