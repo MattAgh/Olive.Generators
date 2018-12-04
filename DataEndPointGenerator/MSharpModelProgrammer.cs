@@ -1,4 +1,5 @@
 ﻿using Olive;
+using Olive.Entities;
 using System;
 using System.Linq;
 using System.Text;
@@ -27,7 +28,7 @@ namespace OliveGenerator
 
             foreach (var item in ReplicatedDataType.ReplicatedDataObject.Fields)
             {
-                r.AppendLine(AddProperty(item.Property.PropertyType, item.Property.Name));
+                r.AppendLine(AddProperty(item));
             }
 
             r.AppendLine("}");
@@ -37,9 +38,10 @@ namespace OliveGenerator
             return new CSharpFormatter(r.ToString()).Format();
         }
 
-        string AddProperty(Type propertyType, string name)
+        string AddProperty(ExportedField item)
         {
-            var type = propertyType;
+            var type = item.Property.PropertyType;
+            var name = item.Property.Name;
             if (type.IsArray) type = type.GetElementType();
 
             bool isNullable;
@@ -50,7 +52,8 @@ namespace OliveGenerator
 
             var method = type.Name;
 
-            if (type.Assembly == Context.AssemblyObject)
+            //if (item.Property.PropertyType.IsA<IEntity>())
+            if (item.IsAssociation)
             {
                 method = "Associate" + "<" + type.Name + ">";
                 if (type.IsEnum) method = "String";
@@ -66,7 +69,7 @@ namespace OliveGenerator
 
             var result = method + "(\"" + name + "\")";
 
-            if (type.Assembly == Context.AssemblyObject && propertyType.IsArray)
+            if (type.Assembly == Context.AssemblyObject && type.IsArray)
                 result += ".MaxCardinality(null)";
 
             if (!isNullable)
