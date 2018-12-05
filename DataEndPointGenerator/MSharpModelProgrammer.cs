@@ -2,6 +2,7 @@
 using Olive.Entities;
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace OliveGenerator
@@ -27,9 +28,7 @@ namespace OliveGenerator
             r.AppendLine("Schema(\"PeopleService\");");
 
             foreach (var item in ReplicatedDataType.ReplicatedDataObject.Fields)
-            {
                 r.AppendLine(AddProperty(item));
-            }
 
             r.AppendLine("}");
             r.AppendLine("}");
@@ -40,23 +39,28 @@ namespace OliveGenerator
 
         string AddProperty(ExportedField item)
         {
+            var extraArgs = "";
             var type = item.Property.PropertyType;
             var name = item.Property.Name;
             if (type.IsArray) type = type.GetElementType();
 
             bool isNullable;
             if (isNullable = type.IsNullable())
-            {
                 type = type.GetGenericArguments().Single();
-            }
 
-            var method = type.Name;
+            var method = type.Name.ToPascalCaseId();
 
-            //if (item.Property.PropertyType.IsA<IEntity>())
             if (item.IsAssociation)
             {
                 method = "Associate" + "<" + type.Name + ">";
                 if (type.IsEnum) method = "String";
+            }
+
+            if (item.IsInverseAssociation)
+            {
+                type = type.GetGenericArguments().Single();
+                method = "InverseAssociate<" + type.Name + ">";
+                extraArgs += ", inverseOf: \"" + item.Property.GetCustomAttribute<InverseOfAttribute>()?.Association + "\"";
             }
 
             switch (method)
@@ -67,14 +71,14 @@ namespace OliveGenerator
                 default: break;
             }
 
-            var result = method + "(\"" + name + "\")";
+            var result = method + $"(\"{name}\"{extraArgs})";
 
             if (type.Assembly == Context.AssemblyObject && type.IsArray)
                 result += ".MaxCardinality(null)";
 
-            if (!isNullable)
+            if (!isNullable && type.IsValueType)
             {
-                if (type.IsValueType) result += ".Mandatory()";
+                result += ".Mandatory()";
             }
 
             return result + ";";
