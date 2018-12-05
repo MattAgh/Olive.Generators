@@ -34,8 +34,8 @@ namespace OliveGenerator
             r.AppendLine();
             r.AppendLine("public override async Task OnStartUpAsync(IApplicationBuilder app)");
             r.AppendLine("{");
-            r.AppendLine("await base.OnStartUpAsync(app);");
-            r.AppendLine($"await {Context.EndPointNamespaceType.Name}.{Context.EndPointName}.Subscribe();");
+            r.AppendLine("    await base.OnStartUpAsync(app);");
+            r.AppendLine($"   await {Context.EndPointName}.Subscribe();");
             r.AppendLine("}");
             r.AppendLine();
 

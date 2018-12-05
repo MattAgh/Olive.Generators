@@ -41,12 +41,9 @@ namespace OliveGenerator
             return new[]
             {
                 "Olive",
-                "Olive.ApiClient",
                 "Olive.Entities",
-                "Olive.Microservices",
-                "Microsoft.Extensions.Logging",
-                "Microsoft.Extensions.DependencyInjection",
-                "Microsoft.Extensions.Configuration.Json"
+                //"Olive.Microservices",
+                "Olive.Entities.Data.Replication",
             };
         }
     }
