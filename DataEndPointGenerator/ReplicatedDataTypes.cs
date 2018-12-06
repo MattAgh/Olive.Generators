@@ -1,4 +1,4 @@
-﻿using Olive.Entities;
+﻿using Olive.Entities.Replication;
 using System;
 
 namespace OliveGenerator

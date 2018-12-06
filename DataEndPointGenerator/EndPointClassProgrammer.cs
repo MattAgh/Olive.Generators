@@ -19,36 +19,26 @@ namespace OliveGenerator
             r.AppendLine("using System;");
             r.AppendLine("using System.Threading.Tasks;");
             r.AppendLine("using Olive.Entities;");
+            r.AppendLine("using Olive.Entities.Replication;");
             r.AppendLine();
 
-            r.AppendLine($"public class {ClassName} : DataReplicationEndPointConsumer");
+            r.AppendLine($"public class {ClassName} : DestinationEndpoint");
             r.AppendLine("{");
-            foreach (var item in Context.EndPointCustomAttributes)
-            {
-                r.AppendLine($"static Type {item.Type.Name}Type => Type.GetType(\"{item.Type.FullName}\");");
-            }
 
+            r.AppendLine($"public override string QueueUrl => Olive.Config.GetOrThrow(\"DataReplication:{EndPoint.FullName}:Url\");");
             r.AppendLine();
-            for (var i = 0; i < Context.EndPointCustomAttributes.Length; i++)
-            {
-                var item = Context.EndPointCustomAttributes[i];
-                r.AppendLine($"/// <summary> Clears all messages from the queue of {item.Type.Name.ToLower()} data. It will then");
-                r.AppendLine($"/// fetch the current data directly from the {item.Type.FullName}. </summary>");
-                r.AppendLine($"public static Task Refresh{item.Type.Name}Data() => RefreshData({item.Type.Name}Type);");
-                r.AppendLine();
-            }
 
-            r.AppendLine($"/// <summary> It will start listening to queue messages to keep the local database up to date");
-            r.AppendLine($"/// with the changes in the {Context.PublisherService}. But before it starts that, if the local table");
-            r.AppendLine($"/// is empty, it will refresh the full data. </summary>");
+            foreach (var item in Context.EndPointCustomAttributes)
+                r.AppendLine($"public static EndpointSubscriber {item.Type.Name} {{ get; private set; }}");
+            r.AppendLine();
 
-            r.AppendLine($"public static async Task Subscribe()");
+            r.AppendLine($"public {ClassName}(System.Reflection.Assembly domainAssembly) : base(domainAssembly)");
             r.AppendLine("{");
             foreach (var item in Context.EndPointCustomAttributes)
-                r.AppendLine($"await Subscribe({item.Type.Name}Type);");
-
-
+                r.AppendLine($"    {item.Type.Name} = Register(\"{item.Type.FullName}\");");
             r.AppendLine("}");
+            r.AppendLine();
+
             r.AppendLine("}");
             r.AppendLine("}");
 

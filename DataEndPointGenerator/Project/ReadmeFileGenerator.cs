@@ -1,4 +1,5 @@
 ﻿using Olive;
+using System.Linq;
 using System.Text;
 
 namespace OliveGenerator
@@ -35,7 +36,7 @@ namespace OliveGenerator
             r.AppendLine("public override async Task OnStartUpAsync(IApplicationBuilder app)");
             r.AppendLine("{");
             r.AppendLine("    await base.OnStartUpAsync(app);");
-            r.AppendLine($"   await {Context.EndPointName}.Subscribe();");
+            r.AppendLine($"    await new {Context.EndPointName}(typeof({Context.EndPointCustomAttributes.FirstOrDefault()?.Type.FullName}).Assembly).Subscribe();");
             r.AppendLine("}");
             r.AppendLine();
 

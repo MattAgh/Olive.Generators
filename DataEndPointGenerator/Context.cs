@@ -1,5 +1,5 @@
 ﻿using Olive;
-using Olive.Entities;
+using Olive.Entities.Replication;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -53,7 +53,12 @@ namespace OliveGenerator
 
             if (result.StartsWith("Could not ")) throw new Exception(result);
 
-            if (result.Contains("Build FAILED")) throw new Exception(result.TrimBefore("Build FAILED"));
+            if (result.Contains("Build FAILED"))
+            {
+                Console.WriteLine("Compile " + command + " manually...");
+                Console.ReadLine();
+                // throw new Exception(result.TrimBefore("Build FAILED"));
+            }
 
             return result;
         }

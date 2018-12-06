@@ -1,5 +1,6 @@
 ﻿using Olive;
 using Olive.Entities;
+using Olive.Entities.Replication;
 using System;
 using System.Linq;
 using System.Reflection;

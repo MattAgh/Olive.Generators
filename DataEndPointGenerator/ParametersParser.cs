@@ -14,7 +14,7 @@ namespace OliveGenerator
 #if DEBUG
             args = new string[4];
             args[0] = @"/assembly:C:\Projects\Geeks.MS\People\Website\bin\Debug\netcoreapp2.1\website.dll";
-            args[1] = @"/dataEndpoint:ProjectsEndPoint";
+            args[1] = @"/dataEndpoint:ProjectsEndpoint";
             args[2] = @"/out:C:\Temp\PrivatePackagesEndPoint";
 
             args[2] = @"/push:http://nuget.geeksms.uat.co/nuget";
