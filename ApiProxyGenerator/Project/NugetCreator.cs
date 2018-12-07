@@ -59,10 +59,7 @@
     <title>{folder}</title>
     <authors>Olive Api Proxy Generator</authors>
     <iconUrl>{creator.IconUrl}</iconUrl>
-    <description>Provides an easy method to invoke the Api functions of {Context.ControllerName}</description>
-    <dependencies>
-    {creator.GetNugetDependencies().Select(x => $"<dependency id=\"{x}\" version=\"{GetLatestNugetVersion(x)}\" />").ToLinesString()}
-    </dependencies>   
+    <description>Provides an easy method to invoke the Api functions of {Context.ControllerName}</description>  
   </metadata>
   <files>
      {ProjectCreators.SelectMany(x => x.GetTargetFiles()).ToLinesString()}

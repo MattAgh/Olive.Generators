@@ -91,19 +91,5 @@ namespace OliveGenerator
             var readme = Folder.GetFile("README.txt").FullName;
             return base.GetTargetFiles().Concat($@"<file src=""{readme}"" target="""" />");
         }
-
-        internal override IEnumerable<string> GetNugetDependencies()
-        {
-            return new[]
-            {
-                "Olive",
-                "Olive.ApiClient",
-                "Olive.Entities",
-                "Olive.Microservices",
-                "Microsoft.Extensions.Logging",
-                "Microsoft.Extensions.DependencyInjection",
-                "Microsoft.Extensions.Configuration.Json"
-            };
-        }
     }
 }

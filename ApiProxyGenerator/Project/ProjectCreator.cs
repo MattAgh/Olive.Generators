@@ -66,7 +66,7 @@ namespace OliveGenerator
             Console.WriteLine("Done");
         }
 
-        internal virtual IEnumerable<string> GetNugetDependencies()
+        internal virtual IEnumerable<KeyValuePair<string, string>> GetNugetDependencies()
         {
             yield break;
         }

@@ -14,18 +14,18 @@ namespace OliveGenerator
             {
                 ParametersParser.LoadParameters();
 
-                Console.WriteLine("Generating Data EndPoint from...");
+                Console.WriteLine("Generating Data Endpoint from...");
                 Console.WriteLine("Publisher service: " + Context.PublisherService);
                 Console.WriteLine("Assembly: " + Context.AssemblyFile);
-                Console.WriteLine("EndPoint: " + Context.EndPointName);
+                Console.WriteLine("Endpoint: " + Context.EndpointName);
                 Console.WriteLine("Temp folder: " + Context.TempPath);
 
                 Context.LoadAssembly();
                 Context.PrepareOutputDirectory();
 
-                new List<ProjectCreator> { new EndPointProjectCreator() };
+                new List<ProjectCreator> { new EndpointProjectCreator() };
 
-                var endPointCreator = new EndPointProjectCreator();
+                var endPointCreator = new EndpointProjectCreator();
                 endPointCreator.Build();
                 new NugetCreator(endPointCreator).Create();
 

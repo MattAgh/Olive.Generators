@@ -20,7 +20,7 @@ namespace OliveGenerator
 
         protected ProjectCreator(string name)
         {
-            Folder = Context.TempPath.GetOrCreateSubDirectory(Context.EndPointNamespaceType.FullName + "." + name);
+            Folder = Context.TempPath.GetOrCreateSubDirectory(Context.EndpointNamespaceType.FullName + "." + name);
         }
 
         protected abstract void AddFiles();

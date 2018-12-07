@@ -3,18 +3,18 @@ using System.Text;
 
 namespace OliveGenerator
 {
-    class EndPointClassProgrammer
+    class EndpointClassProgrammer
     {
-        static Type EndPoint => Context.EndPointNamespaceType;
-        static string ClassName => EndPoint.Name;
+        static Type Endpoint => Context.EndpointNamespaceType;
+        static string ClassName => Endpoint.Name;
 
         public static string Generate()
         {
-            if (Context.EndPointCustomAttributes.Length <= 0)
+            if (Context.EndpointCustomAttributes.Length <= 0)
                 return "";
             var r = new StringBuilder();
 
-            r.AppendLine("namespace " + EndPoint.Namespace);
+            r.AppendLine("namespace " + Endpoint.Namespace);
             r.AppendLine("{");
             r.AppendLine("using System;");
             r.AppendLine("using System.Threading.Tasks;");
@@ -25,16 +25,16 @@ namespace OliveGenerator
             r.AppendLine($"public class {ClassName} : DestinationEndpoint");
             r.AppendLine("{");
 
-            r.AppendLine($"public override string QueueUrl => Olive.Config.GetOrThrow(\"DataReplication:{EndPoint.FullName}:Url\");");
+            r.AppendLine($"public override string QueueUrl => Olive.Config.GetOrThrow(\"DataReplication:{Endpoint.FullName}:Url\");");
             r.AppendLine();
 
-            foreach (var item in Context.EndPointCustomAttributes)
+            foreach (var item in Context.EndpointCustomAttributes)
                 r.AppendLine($"public static EndpointSubscriber {item.Type.Name} {{ get; private set; }}");
             r.AppendLine();
 
             r.AppendLine($"public {ClassName}(System.Reflection.Assembly domainAssembly) : base(domainAssembly)");
             r.AppendLine("{");
-            foreach (var item in Context.EndPointCustomAttributes)
+            foreach (var item in Context.EndpointCustomAttributes)
                 r.AppendLine($"    {item.Type.Name} = Register(\"{item.Type.FullName}\");");
             r.AppendLine("}");
             r.AppendLine();
@@ -49,7 +49,7 @@ namespace OliveGenerator
         {
             var r = new StringBuilder();
 
-            r.AppendLine("namespace " + EndPoint.Namespace);
+            r.AppendLine("namespace " + Endpoint.Namespace);
             r.AppendLine("{");
             r.AppendLine("using System;");
             r.AppendLine("using System.Threading.Tasks;");

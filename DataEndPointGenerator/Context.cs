@@ -11,12 +11,12 @@ namespace OliveGenerator
 {
     class Context
     {
-        public static string PublisherService, EndPointName, NugetServer, NugetApiKey;
+        public static string PublisherService, EndpointName, NugetServer, NugetApiKey;
         public static FileInfo AssemblyFile;
         public static DirectoryInfo TempPath, Output, Source;
         public static Assembly AssemblyObject;
-        public static Type EndPointNamespaceType;
-        public static ExportDataAttribute[] EndPointCustomAttributes;
+        public static Type EndpointNamespaceType;
+        public static ExportDataAttribute[] EndpointCustomAttributes;
         public static List<ReplicatedDataType> ReplicatedDataList = new List<ReplicatedDataType>();
 
         internal static void PrepareOutputDirectory()
@@ -67,21 +67,21 @@ namespace OliveGenerator
         {
             AssemblyObject = Assembly.LoadFrom(AssemblyFile.ExistsOrThrow().FullName);
 
-            EndPointNamespaceType = AssemblyObject.GetType(EndPointName);
-            if (EndPointNamespaceType == null)
+            EndpointNamespaceType = AssemblyObject.GetType(EndpointName);
+            if (EndpointNamespaceType == null)
             {
-                EndPointNamespaceType = AssemblyObject.GetTypes().FirstOrDefault(x => x.Name == EndPointName)
-                  ?? throw new Exception($"No type in the assembly {AssemblyFile.FullName} is named: {EndPointName}.");
-                if (EndPointNamespaceType != null)
+                EndpointNamespaceType = AssemblyObject.GetTypes().FirstOrDefault(x => x.Name == EndpointName)
+                  ?? throw new Exception($"No type in the assembly {AssemblyFile.FullName} is named: {EndpointName}.");
+                if (EndpointNamespaceType != null)
                 {
-                    EndPointName = EndPointNamespaceType.FullName; // Ensure it has full namespace
+                    EndpointName = EndpointNamespaceType.FullName; // Ensure it has full namespace
 
-                    EndPointCustomAttributes = (ExportDataAttribute[])EndPointNamespaceType.GetCustomAttributes(typeof(ExportDataAttribute), inherit: false);
+                    EndpointCustomAttributes = (ExportDataAttribute[])EndpointNamespaceType.GetCustomAttributes(typeof(ExportDataAttribute), inherit: false);
 
-                    if (EndPointCustomAttributes.ToList().Count == 0) throw new Exception("This endpoint has no attribute.");
+                    if (EndpointCustomAttributes.ToList().Count == 0) throw new Exception("This endpoint has no attribute.");
                 }
                 else
-                    throw new Exception(EndPointName + " was not found.");
+                    throw new Exception(EndpointName + " was not found.");
             }
         }
 

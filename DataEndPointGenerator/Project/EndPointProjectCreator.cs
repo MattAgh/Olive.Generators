@@ -4,15 +4,15 @@ using System.Collections.Generic;
 
 namespace OliveGenerator
 {
-    class EndPointProjectCreator : ProjectCreator
+    class EndpointProjectCreator : ProjectCreator
     {
-        public EndPointProjectCreator() : base("EndPoint") { }
+        public EndpointProjectCreator() : base("Endpoint") { }
 
         protected override string Framework => "netstandard2.0";
 
         [EscapeGCop]
         internal override string IconUrl
-            => "https://raw.githubusercontent.com/Geeksltd/Olive/master/Integration/Olive.DataEndPointGenerator/EndPointIcon.png";
+            => "https://raw.githubusercontent.com/Geeksltd/Olive/master/Integration/Olive.DataEndpointGenerator/EndpointIcon.png";
 
         protected override string[] References
             => new[] { "Olive", "Olive.Entities", "Olive.Entities.Data.Replication" };
@@ -20,7 +20,7 @@ namespace OliveGenerator
         protected override void AddFiles()
         {
             Console.Write("Adding the endpoint class...");
-            Folder.GetFile($"{Context.EndPointName}.cs").WriteAllText(EndPointClassProgrammer.Generate());
+            Folder.GetFile($"{Context.EndpointName}.cs").WriteAllText(EndpointClassProgrammer.Generate());
             Console.WriteLine("Done");
             // Console.Write("Adding the endpoint class mock configuration...");
             // MockFolder.GetFile($"{Context.ControllerName}.Mock.cs").WriteAllText(EndPointClassProgrammer.GenerateMock());
@@ -42,7 +42,6 @@ namespace OliveGenerator
             {
                 "Olive",
                 "Olive.Entities",
-                //"Olive.Microservices",
                 "Olive.Entities.Data.Replication",
             };
         }

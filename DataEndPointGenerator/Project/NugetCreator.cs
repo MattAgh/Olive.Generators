@@ -30,7 +30,7 @@
             Environment.CurrentDirectory = NuspecFile.Directory.FullName;
             Context.Run("nuget.exe pack " + NuspecFile.Name);
 
-            return NuspecFile.Directory.GetFiles(NuspecFile.NameWithoutExtension().TrimEnd(".EndPoint") + "*.nupkg").FirstOrDefault()
+            return NuspecFile.Directory.GetFiles(NuspecFile.NameWithoutExtension().TrimEnd(".Endpoint") + "*.nupkg").FirstOrDefault()
                 ?? throw new Exception("Nuget package was not succesfully generated.");
         }
 
@@ -54,12 +54,12 @@
             var nuspec = $@"<?xml version=""1.0"" encoding=""utf-8""?>
 <package xmlns=""http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"">
   <metadata>
-    <id>{folder.TrimEnd(".EndPoint")}</id>
+    <id>{folder.TrimEnd(".Endpoint")}</id>
     <version>{ProjectCreator.Version}</version>
     <title>{folder}</title>
     <authors>Olive Data End Point Generator</authors>
     <iconUrl>{creator.IconUrl}</iconUrl>
-    <description>Provides an easy method to invoke the Api functions of {Context.EndPointName}</description>
+    <description>Provides an easy method to invoke the Api functions of {Context.EndpointName}</description>
     <dependencies>
     {creator.GetNugetDependencies().Select(x => $"<dependency id=\"{x}\" version=\"{GetLatestNugetVersion(x)}\" />").ToLinesString()}
     </dependencies>   
