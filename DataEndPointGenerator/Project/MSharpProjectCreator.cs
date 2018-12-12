@@ -16,10 +16,10 @@ namespace OliveGenerator
 
         protected override void AddFiles()
         {
-            foreach (var item in Context.ReplicatedDataList)
+            foreach (var item in Context.ReplicatedData)
             {
-                Console.Write("Adding M# model class " + item.Type.Name + "...");
-                Folder.GetFile(item.Type.Name + ".cs").WriteAllText(new MSharpModelProgrammer(item).Generate());
+                Console.Write("Adding M# model class " + item.GetType().Name + "...");
+                Folder.GetFile(item.GetType().Name + ".cs").WriteAllText(new MSharpModelProgrammer(item).Generate());
                 Console.WriteLine("Done");
             }
         }

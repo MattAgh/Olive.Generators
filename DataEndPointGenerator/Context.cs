@@ -15,9 +15,8 @@ namespace OliveGenerator
         public static FileInfo AssemblyFile;
         public static DirectoryInfo TempPath, Output, Source;
         public static Assembly AssemblyObject;
-        public static Type EndpointNamespaceType;
-        public static ExportDataAttribute[] EndpointCustomAttributes;
-        public static List<ReplicatedDataType> ReplicatedDataList = new List<ReplicatedDataType>();
+        public static Type EndpointType;
+        public static List<ReplicatedData> ReplicatedData = new List<ReplicatedData>();
 
         internal static void PrepareOutputDirectory()
         {
@@ -67,41 +66,23 @@ namespace OliveGenerator
         {
             AssemblyObject = Assembly.LoadFrom(AssemblyFile.ExistsOrThrow().FullName);
 
-            EndpointNamespaceType = AssemblyObject.GetType(EndpointName);
-            if (EndpointNamespaceType == null)
-            {
-                EndpointNamespaceType = AssemblyObject.GetTypes().FirstOrDefault(x => x.Name == EndpointName)
-                  ?? throw new Exception($"No type in the assembly {AssemblyFile.FullName} is named: {EndpointName}.");
-                if (EndpointNamespaceType != null)
-                {
-                    EndpointName = EndpointNamespaceType.FullName; // Ensure it has full namespace
+            EndpointType = AssemblyObject.GetType(EndpointName) ??
+                AssemblyObject.GetTypes().FirstOrDefault(x => x.Name == EndpointName) ??
+                throw new Exception($"No type in the assembly {AssemblyFile.FullName} is named: {EndpointName}.");
 
-                    EndpointCustomAttributes = (ExportDataAttribute[])EndpointNamespaceType.GetCustomAttributes(typeof(ExportDataAttribute), inherit: false);
-
-                    if (EndpointCustomAttributes.ToList().Count == 0) throw new Exception("This endpoint has no attribute.");
-                }
-                else
-                    throw new Exception(EndpointName + " was not found.");
-            }
+            EndpointName = EndpointType.FullName; // Ensure it has full namespace             
         }
 
         internal static void FindReplicatedDataClasses()
         {
-            var replicatedDataChildClass = AssemblyObject.GetTypes().Where(x => x.BaseType.IsA(typeof(ReplicatedData)));
-            if (replicatedDataChildClass == null) return;
+            ReplicatedData = EndpointType.CreateInstance<SourceEndpoint>()
+                .GetTypes()
+                .Select(x => x.CreateInstance<ReplicatedData>())
+                .ToList();
 
-            foreach (var childClass in replicatedDataChildClass)
-            {
-                var instanceClass = childClass.CreateInstance();
-                var methodDefine = instanceClass.GetType().GetRuntimeMethods().Where(x => x.Name == "Define").FirstOrDefault();
-                if (methodDefine == null) continue;
+            if (ReplicatedData.None()) throw new Exception("This endpoint has no replicated data types.");
 
-                methodDefine.Invoke(instanceClass, null);
-                var replicatedDataObject = (ReplicatedData)instanceClass;
-                if (replicatedDataObject == null) continue;
-
-                ReplicatedDataList.Add(new ReplicatedDataType(childClass, replicatedDataObject));
-            }
+            ReplicatedData.Do(x => x.Define());
         }
     }
 }

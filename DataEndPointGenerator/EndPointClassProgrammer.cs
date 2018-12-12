@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Olive;
+using System;
+using System.Linq;
 using System.Text;
 
 namespace OliveGenerator
 {
     class EndpointClassProgrammer
     {
-        static Type Endpoint => Context.EndpointNamespaceType;
+        static Type Endpoint => Context.EndpointType;
         static string ClassName => Endpoint.Name;
 
         public static string Generate()
         {
-            if (Context.EndpointCustomAttributes.Length <= 0)
-                return "";
             var r = new StringBuilder();
 
             r.AppendLine("namespace " + Endpoint.Namespace);
@@ -28,14 +28,14 @@ namespace OliveGenerator
             r.AppendLine($"public override string QueueUrl => Olive.Config.GetOrThrow(\"DataReplication:{Endpoint.FullName}:Url\");");
             r.AppendLine();
 
-            foreach (var item in Context.EndpointCustomAttributes)
-                r.AppendLine($"public static EndpointSubscriber {item.Type.Name} {{ get; private set; }}");
+            foreach (var item in Context.ReplicatedData)
+                r.AppendLine($"public static EndpointSubscriber {item.GetType().Name} {{ get; private set; }}");
             r.AppendLine();
 
             r.AppendLine($"public {ClassName}(System.Reflection.Assembly domainAssembly) : base(domainAssembly)");
             r.AppendLine("{");
-            foreach (var item in Context.EndpointCustomAttributes)
-                r.AppendLine($"    {item.Type.Name} = Register(\"{item.Type.FullName}\");");
+            foreach (var item in Context.ReplicatedData)
+                r.AppendLine($"    {item.GetType().Name} = Register(\"{item.GetType().FullName}\");");
             r.AppendLine("}");
             r.AppendLine();
 

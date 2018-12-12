@@ -10,25 +10,25 @@ namespace OliveGenerator
 {
     internal class MSharpModelProgrammer
     {
-        ReplicatedDataType ReplicatedDataType;
+        ReplicatedData ReplicatedDataType;
 
-        public MSharpModelProgrammer(ReplicatedDataType replicatedDataType) => ReplicatedDataType = replicatedDataType;
+        public MSharpModelProgrammer(ReplicatedData replicatedDataType) => ReplicatedDataType = replicatedDataType;
 
         internal string Generate()
         {
             var r = new StringBuilder();
 
             r.AppendLine("using MSharp;");
-            r.AppendLine("namespace PeopleService");
+            r.AppendLine("namespace " + ReplicatedDataType.GetType().Namespace);
             r.AppendLine("{");
             r.AppendLine();
-            r.AppendLine("public class " + ReplicatedDataType.Type.Name + " : EntityType");
+            r.AppendLine("public class " + ReplicatedDataType.GetType().Name + " : EntityType");
             r.AppendLine("{");
-            r.AppendLine("public " + ReplicatedDataType.Type.Name + "()");
+            r.AppendLine("public " + ReplicatedDataType.GetType().Name + "()");
             r.AppendLine("{");
-            r.AppendLine("Schema(\"PeopleService\");");
+            r.AppendLine($"Schema(\"{ReplicatedDataType.GetType().Namespace}\");");
 
-            foreach (var item in ReplicatedDataType.ReplicatedDataObject.Fields)
+            foreach (var item in ReplicatedDataType.Fields)
                 r.AppendLine(AddProperty(item));
 
             r.AppendLine("}");
@@ -41,8 +41,8 @@ namespace OliveGenerator
         string AddProperty(ExportedField item)
         {
             var extraArgs = "";
-            var type = item.Property.PropertyType;
-            var name = item.Property.Name;
+            var type = item.GetPropertyType();
+            var name = item.GetName();
             if (type.IsArray) type = type.GetElementType();
 
             bool isNullable;
@@ -57,11 +57,11 @@ namespace OliveGenerator
                 if (type.IsEnum) method = "String";
             }
 
-            if (item.IsInverseAssociation)
+            if (item is ExportedPropertyInfo p && p.IsInverseAssociation)
             {
                 type = type.GetGenericArguments().Single();
                 method = "InverseAssociate<" + type.Name + ">";
-                extraArgs += ", inverseOf: \"" + item.Property.GetCustomAttribute<InverseOfAttribute>()?.Association + "\"";
+                extraArgs += ", inverseOf: \"" + p.Property.GetCustomAttribute<InverseOfAttribute>()?.Association + "\"";
             }
 
             switch (method)
