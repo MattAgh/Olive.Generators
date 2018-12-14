@@ -21,7 +21,7 @@ namespace OliveGenerator
                 Console.WriteLine("Temp folder: " + Context.TempPath);
 
                 Context.LoadAssembly();
-                Context.FindReplicatedDataClasses();
+                Context.FindExposedTypes();
                 Context.PrepareOutputDirectory();
 
                 new List<ProjectCreator> { new EndpointProjectCreator() };
@@ -30,7 +30,7 @@ namespace OliveGenerator
                 endPointCreator.Build();
                 new NugetCreator(endPointCreator).Create();
 
-                if (Context.ReplicatedData.Any())
+                if (Context.ExposedTypes.Any())
                 {
                     var projectCreators = new[] { new MSharpProjectCreator(), new MSharp46ProjectCreator() };
                     projectCreators.AsParallel().Do(x => x.Build());

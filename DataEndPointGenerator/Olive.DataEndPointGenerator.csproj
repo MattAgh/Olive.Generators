@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -6,7 +6,7 @@
     <AssemblyName>Olive.DataEndpointGenerator</AssemblyName>
     <RootNamespace>Olive</RootNamespace>
     <PackageId>generate-data-endpoint-proxy</PackageId>
-    <Version>1.0.103</Version>
+    <Version>1.0.105</Version>
     <Title>Olive Data Endpoint Proxy Generator</Title>
     <Authors>Geeks Ltd</Authors>
     <PackageProjectUrl>https://github.com/Geeksltd/Olive/blob/master/Integration/Olive.Microservices/Integration.md</PackageProjectUrl>
@@ -24,6 +24,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="Olive" Version="1.0.143" />
     <PackageReference Include="Olive.Entities" Version="1.0.84" />
-    <PackageReference Include="Olive.Entities.Data.Replication" Version="1.0.103" />
+    <PackageReference Include="Olive.Entities.Data.Replication" Version="1.0.107" />
   </ItemGroup>
 </Project>

@@ -16,7 +16,7 @@ namespace OliveGenerator
 
         protected override void AddFiles()
         {
-            foreach (var item in Context.ReplicatedData)
+            foreach (var item in Context.ExposedTypes)
             {
                 Console.Write("Adding M# model class " + item.GetType().Name + "...");
                 Folder.GetFile(item.GetType().Name + ".cs").WriteAllText(new MSharpModelProgrammer(item).Generate());

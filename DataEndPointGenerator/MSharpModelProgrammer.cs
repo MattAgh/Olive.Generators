@@ -10,25 +10,27 @@ namespace OliveGenerator
 {
     internal class MSharpModelProgrammer
     {
-        ReplicatedData ReplicatedDataType;
+        ExposedType ExposedType;
 
-        public MSharpModelProgrammer(ReplicatedData replicatedDataType) => ReplicatedDataType = replicatedDataType;
+        Type Type => ExposedType.GetType();
+
+        public MSharpModelProgrammer(ExposedType type) => ExposedType = type;
 
         internal string Generate()
         {
             var r = new StringBuilder();
 
             r.AppendLine("using MSharp;");
-            r.AppendLine("namespace " + ReplicatedDataType.GetType().Namespace);
+            r.AppendLine("namespace " + Type.Namespace);
             r.AppendLine("{");
             r.AppendLine();
-            r.AppendLine("public class " + ReplicatedDataType.GetType().Name + " : EntityType");
+            r.AppendLine("public class " + Type.Name + " : EntityType");
             r.AppendLine("{");
-            r.AppendLine("public " + ReplicatedDataType.GetType().Name + "()");
+            r.AppendLine("public " + Type.Name + "()");
             r.AppendLine("{");
-            r.AppendLine($"Schema(\"{ReplicatedDataType.GetType().Namespace}\");");
+            r.AppendLine($"Schema(\"{Type.Namespace}\");");
 
-            foreach (var item in ReplicatedDataType.Fields)
+            foreach (var item in ExposedType.Fields)
                 r.AppendLine(AddProperty(item));
 
             r.AppendLine("}");
@@ -38,7 +40,7 @@ namespace OliveGenerator
             return new CSharpFormatter(r.ToString()).Format();
         }
 
-        string AddProperty(ExportedField item)
+        string AddProperty(ExposedField item)
         {
             var extraArgs = "";
             var type = item.GetPropertyType();
@@ -57,7 +59,7 @@ namespace OliveGenerator
                 if (type.IsEnum) method = "String";
             }
 
-            if (item is ExportedPropertyInfo p && p.IsInverseAssociation)
+            if (item is ExposedPropertyInfo p && p.IsInverseAssociation)
             {
                 type = type.GetGenericArguments().Single();
                 method = "InverseAssociate<" + type.Name + ">";

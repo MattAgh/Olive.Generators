@@ -16,7 +16,7 @@ namespace OliveGenerator
         public static DirectoryInfo TempPath, Output, Source;
         public static Assembly AssemblyObject;
         public static Type EndpointType;
-        public static List<ReplicatedData> ReplicatedData = new List<ReplicatedData>();
+        public static List<ExposedType> ExposedTypes = new List<ExposedType>();
 
         internal static void PrepareOutputDirectory()
         {
@@ -73,16 +73,16 @@ namespace OliveGenerator
             EndpointName = EndpointType.FullName; // Ensure it has full namespace             
         }
 
-        internal static void FindReplicatedDataClasses()
+        internal static void FindExposedTypes()
         {
-            ReplicatedData = EndpointType.CreateInstance<SourceEndpoint>()
+            ExposedTypes = EndpointType.CreateInstance<SourceEndpoint>()
                 .GetTypes()
-                .Select(x => x.CreateInstance<ReplicatedData>())
+                .Select(x => x.CreateInstance<ExposedType>())
                 .ToList();
 
-            if (ReplicatedData.None()) throw new Exception("This endpoint has no replicated data types.");
+            if (ExposedTypes.None()) throw new Exception("This endpoint has no exposed data types.");
 
-            ReplicatedData.Do(x => x.Define());
+            ExposedTypes.Do(x => x.Define());
         }
     }
 }

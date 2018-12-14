@@ -28,14 +28,14 @@ namespace OliveGenerator
             r.AppendLine($"public override string QueueUrl => Olive.Config.GetOrThrow(\"DataReplication:{Endpoint.FullName}:Url\");");
             r.AppendLine();
 
-            foreach (var item in Context.ReplicatedData)
+            foreach (var item in Context.ExposedTypes)
                 r.AppendLine($"public static EndpointSubscriber {item.GetType().Name} {{ get; private set; }}");
             r.AppendLine();
 
             r.AppendLine($"public {ClassName}(System.Reflection.Assembly domainAssembly) : base(domainAssembly)");
             r.AppendLine("{");
-            foreach (var item in Context.ReplicatedData)
-                r.AppendLine($"    {item.GetType().Name} = Register(\"{item.GetType().FullName}\");");
+            foreach (var item in Context.ExposedTypes)
+                r.AppendLine($"    {item.GetType().Name} = Register(\"{item.GetType().Namespace}.{item.GetType().Name}\");");
             r.AppendLine("}");
             r.AppendLine();
 
