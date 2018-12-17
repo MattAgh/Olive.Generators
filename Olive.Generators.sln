@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Olive.DataEndpointGenerator
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared", "..\Shared\Shared.shproj", "{419458C3-AACB-4993-B5B3-D01979CAB412}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Olive.AcceleratePackage", "AcceleratePackage\Olive.AcceleratePackage.csproj", "{0A15B1E6-4146-4E86-9213-1D90B6DC193B}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\Shared\Shared.projitems*{419458c3-aacb-4993-b5b3-d01979cab412}*SharedItemsImports = 13
@@ -26,6 +28,10 @@ Global
 		{52449D24-DA0B-4113-9A60-FB1DA4FAB81D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52449D24-DA0B-4113-9A60-FB1DA4FAB81D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52449D24-DA0B-4113-9A60-FB1DA4FAB81D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A15B1E6-4146-4E86-9213-1D90B6DC193B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A15B1E6-4146-4E86-9213-1D90B6DC193B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A15B1E6-4146-4E86-9213-1D90B6DC193B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A15B1E6-4146-4E86-9213-1D90B6DC193B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
