@@ -28,7 +28,8 @@ namespace OliveGenerator
             r.AppendLine("{");
             r.AppendLine("public " + Type.Name + "()");
             r.AppendLine("{");
-            r.AppendLine($"Schema(\"{Type.Namespace}\");");
+            r.AppendLine($"Schema(\"{Type.Namespace}\").IsRemoteCopy();");
+            r.AppendLine();
 
             foreach (var item in ExposedType.Fields)
                 r.AppendLine(AddProperty(item));
