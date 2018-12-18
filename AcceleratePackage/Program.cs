@@ -26,11 +26,7 @@ namespace OliveGenerator
             {
                 Helper.ShowError(ex);
                 return -1;
-            }
-            finally
-            {
-                Console.ReadLine();
-            }
+            }            
         }
     }
 }
